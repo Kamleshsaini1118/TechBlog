@@ -87,7 +87,7 @@ export default function Posts() {
           />
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mr-10">
           {allTags.map((tag) => (
             <button
               key={tag}
