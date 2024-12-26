@@ -127,7 +127,7 @@ Contributions are welcome! Follow these steps:
 ## **Contact**
 
 For questions or suggestions, feel free to reach out:
-- **Email**: kamleshsaini1345@example.com
-- **GitHub**: [Kamleshsaini1118](https://github.com/yourusername)
+- **Email**: kamleshsaini1345@gmail.com
+- **GitHub**: [Kamleshsaini1118](https://github.com/Kamleshsaini1118)
 
 Happy Blogging! 🚀
