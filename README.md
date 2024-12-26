@@ -79,7 +79,7 @@ Ensure you have the following installed:
 ### **Frontend Setup**
 1. Navigate to the frontend directory:
    ```bash
-   cd ../frontend
+   cd /Frontend/blog
    ```
 2. Install dependencies:
    ```bash
