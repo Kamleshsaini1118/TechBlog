@@ -76,6 +76,78 @@ const Home = () => {
     }, 1000);
   };
 
+  // return (
+  //   <>
+  //     {loading ? (
+  //       <div className="flex items-center justify-center min-h-screen">
+  //         <div className="h-16 w-16 border-8 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+  //       </div>
+  //     ) : (
+  //       <>
+  //         <section className="flex flex-col items-center justify-center mt-12">
+  //           {isLoggedIn ? (
+  //             <div className=" items-center justify-center gap-8 mx-10 my-8">
+  //               <h1 className="text-4xl text-gray-700 font-bold mb-5 text-center">Your Blog Posts</h1>
+  //               <div className='flex items-center justify-center'>
+  //                 <div className="w-96 border-t border-gray-400 mb-8 mx-4 "></div>
+  //                 <FaStar className='h-5 w-5 mb-8' />
+  //                 <div className="w-96 border-t border-gray-400 mb-8 mx-4 "></div>
+  //               </div>
+  //                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8'>
+  //                   {userPosts.length > 0 ? (
+  //                     userPosts.map((post) => (
+  //                       <PostCard key={post._id} post={post} />
+  //                     ))
+  //                   ) : (
+  //                     <p className="text-center text-gray-500">You haven't created any posts yet.</p>
+  //                   )}
+  //                 </div>
+  //             </div>
+  //           ) : (
+  //             <>
+  //               <div className="text-5xl text-gray-700 font-light leading-relaxed text-center">
+  //                 <h1>Publish your passions, your way</h1>
+  //               </div>
+  //               <div className="text-2xl mt-4 text-center">
+  //                 <p>Create a unique and beautiful blog easily.</p>
+  //               </div>
+  //               <div className="m-10">
+  //                 <button
+  //                   onClick={handleClick}
+  //                   className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
+  //                 >
+  //                   CREATE YOUR BLOG
+  //                 </button>
+  //               </div>
+  //             </>
+  //           )}
+  //         </section>
+
+  //         {/* Second Section with PostCard for logged-in user */}
+  //         {/* <section className="items-center justify-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-10 my-14">
+  //           {userPosts.length > 0 ? (
+  //             userPosts.map((post) => (
+  //               <PostCard key={post._id} post={post} />
+  //             ))
+  //           ) : (
+  //             <div className="text-center text-gray-500">No posts to display.</div>
+  //           )}
+  //         </section> */}
+
+  //         <div className="text-center mb-10">
+  //           <Link
+  //             to="/posts"
+  //             className="inline-flex items-center space-x-2 text-indigo-600 transition duration-75 hover:text-indigo-800 text-lg hover:scale-105"
+  //           >
+  //             <span>View all posts</span>
+  //             <FaArrowRight className="h-4 w-4" /> 
+  //           </Link>
+  //         </div>
+  //       </>
+  //     )}
+  //   </>
+  // );
+
   return (
     <>
       {loading ? (
@@ -84,37 +156,43 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <section className="flex flex-col items-center justify-center mt-12">
+          <section className="flex flex-col items-center justify-center mt-12 px-4 md:px-8">
             {isLoggedIn ? (
-              <div className=" items-center justify-center gap-8 mx-10 my-8">
-                <h1 className="text-4xl text-gray-700 font-bold mb-5 text-center">Your Blog Posts</h1>
-                <div className='flex items-center justify-center'>
-                  <div className="w-96 border-t border-gray-400 mb-8 mx-4 "></div>
-                  <FaStar className='h-5 w-5 mb-8' />
-                  <div className="w-96 border-t border-gray-400 mb-8 mx-4 "></div>
+              <div className="flex flex-col items-center justify-center gap-8 mx-auto my-8 w-full max-w-7xl">
+                <h1 className="text-3xl md:text-4xl text-gray-700 font-bold mb-5 text-center">
+                  Your Blog Posts
+                </h1>
+                {/* Line and Star Section */}
+                <div className="flex items-center justify-center">
+                  <div className="w-40 md:w-96 border-t border-gray-400 mb-8 mx-4"></div> {/* Line size adjusts for smaller screens */}
+                  <FaStar className="h-5 w-5 mb-8 text-gray-600" /> {/* Star remains the same size */}
+                  <div className="w-40 md:w-96 border-t border-gray-400 mb-8 mx-4"></div>
                 </div>
-                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8'>
-                    {userPosts.length > 0 ? (
-                      userPosts.map((post) => (
-                        <PostCard key={post._id} post={post} />
-                      ))
-                    ) : (
-                      <p className="text-center text-gray-500">You haven't created any posts yet.</p>
-                    )}
-                  </div>
+                {/* Post Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 w-full">
+                  {userPosts.length > 0 ? (
+                    userPosts.map((post) => (
+                      <PostCard key={post._id} post={post} />
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500">
+                      You haven't created any posts yet.
+                    </p>
+                  )}
+                </div>
               </div>
             ) : (
               <>
-                <div className="text-5xl text-gray-700 font-light leading-relaxed text-center">
+                <div className="text-3xl md:text-5xl text-gray-700 font-light leading-relaxed text-center px-2">
                   <h1>Publish your passions, your way</h1>
                 </div>
-                <div className="text-2xl mt-4 text-center">
+                <div className="text-lg md:text-2xl mt-4 text-center">
                   <p>Create a unique and beautiful blog easily.</p>
                 </div>
-                <div className="m-10">
+                <div className="mt-6 md:mt-10">
                   <button
                     onClick={handleClick}
-                    className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
+                    className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-transform transform hover:scale-105"
                   >
                     CREATE YOUR BLOG
                   </button>
@@ -122,31 +200,21 @@ const Home = () => {
               </>
             )}
           </section>
-
-          {/* Second Section with PostCard for logged-in user */}
-          {/* <section className="items-center justify-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-10 my-14">
-            {userPosts.length > 0 ? (
-              userPosts.map((post) => (
-                <PostCard key={post._id} post={post} />
-              ))
-            ) : (
-              <div className="text-center text-gray-500">No posts to display.</div>
-            )}
-          </section> */}
-
+  
           <div className="text-center mb-10">
             <Link
               to="/posts"
-              className="inline-flex items-center space-x-2 text-indigo-600 transition duration-75 hover:text-indigo-800 text-lg hover:scale-105"
+              className="inline-flex items-center space-x-2 text-indigo-600 transition duration-75 hover:text-indigo-800 text-base md:text-lg hover:scale-105 mt-10"
             >
               <span>View all posts</span>
-              <FaArrowRight className="h-4 w-4" /> 
+              <FaArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </>
       )}
     </>
   );
+  
 };
 
 export default Home;
