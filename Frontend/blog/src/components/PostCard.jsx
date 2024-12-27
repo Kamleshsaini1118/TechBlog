@@ -7,7 +7,7 @@ export default function PostCard({ post, onPostDeleted, onPostUpdated }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  console.log("post in card:", post)
+  // console.log("post in card:", post)
   if (!post) {
     return <div className="text-red-500">Invalid Post Data</div>;
   }
@@ -105,7 +105,7 @@ export default function PostCard({ post, onPostDeleted, onPostUpdated }) {
  
   const image = post?.imageUrl;
 
-  console.log("POST card imageUrl:", image);
+  // console.log("POST card imageUrl:", image);
 
   return (
     <div className="relative max-w-sm bg-white rounded-lg shadow-md hover:shadow-2xl overflow-hidden border border-gray-300 mx-12 mb-16 transition duration-75 transform hover:scale-105 flex flex-col min-h-[500px]">
