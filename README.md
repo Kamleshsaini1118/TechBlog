@@ -90,7 +90,7 @@ Ensure you have the following installed:
    npm run dev
    ```
 
-4. Open your browser and visit `(https://tech-blog-sooty-two.vercel.app/)`.
+4. Open your browser and visit `[https://tech-blog-sooty-two.vercel.app/]`.
 
 ---
 
