@@ -31,7 +31,6 @@ const PostDetail = () => {
     fetchPost();
   }, [id]);
 
-
 // This will log the updated post after the state has been set
   useEffect(() => {
     console.log("Post Object:", post);
@@ -65,24 +64,61 @@ const PostDetail = () => {
   // Handle comment submission
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) return;
-
+  
     try {
       const token = localStorage.getItem("authToken");
+
+      console.log("Token:", token);  // Log the token
+
+      if (!token) {
+        console.error("Auth token not found");
+        return;
+      }
+  
       const response = await axios.post(
-        `http://localhost:4000/posts/get/comments/${id}`,
+        `http://localhost:4000/posts/comments/${id}`,  // Correct route URL
         { text: newComment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+  
       setComments([...comments, response.data]); // Update comments list
       setNewComment(""); // Clear input field
     } catch (error) {
-      console.error("Error submitting comment:", error);
+      console.error("Error submitting comment:", error.response?.data || error.message);
+      if (error.response) {
+        // Log the full error response for debugging
+        console.error("Error Response Data:", error.response.data);
+        console.error("Error Response Status:", error.response.status);
+        console.error("Error Response Headers:", error.response.headers);
+      }
     }
-  };
+  };  
 
+  // const handleCommentDelete = async (commentId) => {
+  //   try {
+  //     const token = localStorage.getItem("authToken");
+  //     if (!token) {
+  //       console.error("Auth token not found");
+  //       return;
+  //     }
+
+  //     // Send DELETE request to backend
+  //     await axios.delete(
+  //       `http://localhost:4000/posts/comments/${id}/${commentId}`,
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+
+  //     // Update the comments list after deleting
+  //     setComments(comments.filter((comment) => comment._id !== commentId));
+  //   } catch (error) {
+  //     console.error("Error deleting comment:", error.response?.data || error.message);
+  //   }
+  // };
+    
   // const imageUrl = post?.image ? `http://localhost:4000/images/${post.image}` : null;
+ 
   const imageUrl = post?.imageUrl
-  console.log("Detail Image URL:", imageUrl);
+  // console.log("Detail Image URL:", imageUrl);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -135,8 +171,8 @@ const PostDetail = () => {
             <h2 className="text-2xl font-semibold mb-4">Comments</h2>
             <ul className="space-y-4 mb-6">
               {comments.map((comment) => (
-                <li key={comment.id} className="p-4 border rounded-lg">
-                  <p className="text-gray-800">{comment.text}</p>
+                <li key={comment._id || comment.createdAt} className="p-4 border rounded-lg">
+                  <p className="text-gray-800">{comment.content}</p>
                   <span className="text-gray-500 text-sm">
                     {new Date(comment.createdAt).toLocaleString()}
                   </span>
@@ -179,3 +215,5 @@ const PostDetail = () => {
 };
 
 export default PostDetail;
+
+

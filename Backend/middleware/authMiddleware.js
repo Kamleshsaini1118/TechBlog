@@ -135,6 +135,64 @@
 
 // module.exports = authMiddleware;
 
+// -------------------------------------------------------------------------------------------------------
+
+// const errorHandler = require("../utils/errorHandler");
+// const apiResponse = require("../utils/apiResponse");
+// const jwt = require("jsonwebtoken");
+// const User = require("../models/userModel");
+
+// const authMiddleware = async (req, res, next) => {
+//   try {
+//     // 1. Get the token from cookies or Authorization header
+//     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+//     if (!token) {
+//       console.log("No token found in cookies or header");
+//       throw new errorHandler(401, "Unauthorized request: No token provided.");
+//     }
+
+//     // 2. Verify the token
+//     let decodedToken;
+//     try {
+//       decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+//     } catch (error) {
+//       if (error.name === "TokenExpiredError") {
+//         // Token has expired
+//         console.error("Error: Token has expired.");
+//         return res.status(401).json(
+//           new apiResponse(false, "Access token has expired. Please login again.")
+//         );
+//       } else {
+//         // Other JWT errors
+//         console.error("JWT Verification Error:", error);
+//         throw new errorHandler(401, "Invalid access token.");
+//       }
+//     }
+
+//     // 3. Find the user associated with the token
+//     const user = await User.findById(decodedToken?._id).select("-password");
+//     if (!user) {
+//       throw new errorHandler(401, "Invalid Access Token");
+//     }
+
+//     // 4. Attach the user to the request object
+//     req.user = user;
+
+//     // 5. Proceed to the next middleware
+//     next();
+//   } catch (error) {
+//     // Log and respond to any other errors
+//     console.error("Error in authMiddleware:", error);
+//     return res.status(error.statusCode || 500).json(
+//       new apiResponse(false, error?.message || "Unauthorized request.")
+//     );
+//   }
+// };
+
+// module.exports = authMiddleware;
+
+// -------------------------------------------------------------------------------------------------------
+
 
 const errorHandler = require("../utils/errorHandler");
 const apiResponse = require("../utils/apiResponse");
@@ -143,49 +201,84 @@ const User = require("../models/userModel");
 
 const authMiddleware = async (req, res, next) => {
   try {
-    // 1. Get the token from cookies or Authorization header
-    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-    if (!token) {
-      console.log("No token found in cookies or header");
+    // 1. Get the tokens from cookies or headers
+    const accessToken =
+      req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+    const refreshToken = req.cookies?.refreshToken; // Assuming refresh token is stored in cookies
+
+    if (!accessToken) {
+      console.log("No access token found in cookies or header.");
       throw new errorHandler(401, "Unauthorized request: No token provided.");
     }
 
-    // 2. Verify the token
     let decodedToken;
     try {
-      decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+      // 2. Verify the access token
+      decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET);
     } catch (error) {
       if (error.name === "TokenExpiredError") {
-        // Token has expired
-        console.error("Error: Token has expired.");
-        return res.status(401).json(
-          new apiResponse(false, "Access token has expired. Please login again.")
+        console.log("Access token has expired. Attempting to refresh...");
+
+        // 3. If access token is expired, verify the refresh token
+        if (!refreshToken) {
+          console.error("Refresh token missing.");
+          throw new errorHandler(401, "Session expired. Please login again.");
+        }
+
+        let decodedRefreshToken;
+        try {
+          decodedRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        } catch (refreshError) {
+          console.error("Refresh token invalid or expired.");
+          throw new errorHandler(401, "Session expired. Please login again.");
+        }
+
+        // 4. Generate new access token
+        const user = await User.findById(decodedRefreshToken?._id).select("-password");
+        if (!user) {
+          throw new errorHandler(401, "Invalid refresh token.");
+        }
+
+        const newAccessToken = jwt.sign(
+          { _id: user._id },
+          process.env.JWT_SECRET,
+          { expiresIn: "15m" } // Short expiry for access token
         );
+
+        // 5. Set new access token in cookies or return it
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+        });
+
+        console.log("New access token generated and set in cookies.");
+        req.user = user;
+        return next();
       } else {
-        // Other JWT errors
         console.error("JWT Verification Error:", error);
         throw new errorHandler(401, "Invalid access token.");
       }
     }
 
-    // 3. Find the user associated with the token
+    // 6. Find the user associated with the token
     const user = await User.findById(decodedToken?._id).select("-password");
     if (!user) {
-      throw new errorHandler(401, "Invalid Access Token");
+      throw new errorHandler(401, "Invalid Access Token.");
     }
 
-    // 4. Attach the user to the request object
+    // 7. Attach the user to the request object
     req.user = user;
 
-    // 5. Proceed to the next middleware
+    // 8. Proceed to the next middleware
     next();
   } catch (error) {
-    // Log and respond to any other errors
     console.error("Error in authMiddleware:", error);
-    return res.status(error.statusCode || 500).json(
-      new apiResponse(false, error?.message || "Unauthorized request.")
-    );
+    return res
+      .status(error.statusCode || 500)
+      .json(new apiResponse(false, error?.message || "Unauthorized request."));
   }
 };
 
 module.exports = authMiddleware;
+
