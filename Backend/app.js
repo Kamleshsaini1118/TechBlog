@@ -19,10 +19,23 @@ app.use('/images', express.static(path.join(__dirname, './public/images')));
 
 app.use(
     cors({
-        origin: "http://localhost:5173", // Frontend ka origin
+        origin: ["http://localhost:5173", "https://tech-blog-sooty-two.vercel.app"], // Frontend ka origin
         credentials: true, // Cookies ko allow karega
     })
 );
+
+// Handle OPTIONS preflight requests
+app.options("*", cors());
+
+// Additional headers for safety (optional)
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", req.headers.origin); // Dynamic origin
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+});
+
 app.use(express.json());
 app.use(cookieParser());
 

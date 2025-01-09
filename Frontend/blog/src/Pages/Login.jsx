@@ -13,6 +13,8 @@ export default function Login() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false); 
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // loading start
@@ -20,7 +22,7 @@ export default function Login() {
     try {
       if (isLogin) {
         // Login request to the backend
-        const response = await axios.post("http://localhost:4000/users/login", {
+        const response = await axios.post(`${API_URL}/users/login` , {
           email,
           password,
         },{ withCredentials: true }
