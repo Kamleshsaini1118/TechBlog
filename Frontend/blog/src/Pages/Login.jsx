@@ -25,7 +25,8 @@ export default function Login() {
         const response = await axios.post(`${API_URL}/users/login` , {
           email,
           password,
-        },{ withCredentials: true }
+        },{ withCredentials: true } 
+
       );
 
         console.log("Response from backend:", response.data);
@@ -64,7 +65,7 @@ export default function Login() {
       } else {
         // Register request to the backend
         const response = await axios.post(
-          "http://localhost:4000/users/register",
+          `${API_URL}/users/register`,
           {
             username,
             email,
