@@ -19,7 +19,7 @@ app.use('/images', express.static(path.join(__dirname, './public/images')));
 
 app.use(
     cors({
-        origin: ["http://localhost:5173", "https://tech-blog-sooty-two.vercel.app"], // Frontend ka origin
+        origin: ["http://localhost:5173", "https://tech-blog-cxl39nq2o-kr-projects.vercel.app"], // Frontend ka origin
         credentials: true, // Cookies ko allow karega
     })
 );
