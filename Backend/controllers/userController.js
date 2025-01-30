@@ -90,7 +90,7 @@ const loginUser = async (req, res) => {
     console.log("email:", email);
 
     // step - 2
-    if(!(username || email)){
+    if(!(password || email)){
         throw new errorHandler(400, "usernmae or email is required.")
     }
     console.log("username: " ,username);
@@ -98,7 +98,7 @@ const loginUser = async (req, res) => {
 
     // step - 3
     const user = await User.findOne({
-        $or : [ {username}, {email} ]
+        $or : [ {email} ]
     })
 
     console.log("user found: ", user);
