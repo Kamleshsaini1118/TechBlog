@@ -15,8 +15,8 @@ export default function Login() {
 
   // const API_URL = process.env.REACT_APP_API_URL;
 
-  // const API_URL = process.env.VITE_REACT_APP_API_URL;
-  // console.log("API_URL:", API_URL);
+  const API_URL = process.env.REACT_APP_API_URL;
+  console.log("API_URL:", API_URL);
 
 
   // console.log("api_url:", API_URL)
@@ -28,7 +28,7 @@ export default function Login() {
     try {
       if (isLogin) {
         // Login request to the backend
-        const response = await axios.post(`http://localhost:4000/users/login` , {
+        const response = await axios.post(`${API_URL}/users/login` , {
           email,
           password,
         },{ withCredentials: true } 
@@ -70,7 +70,7 @@ export default function Login() {
       } else {
         // Register request to the backend
         const response = await axios.post(
-          `http://localhost:4000/users/register`,
+          `${API_URL}/users/register`,
           {
             username,
             email,
