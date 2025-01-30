@@ -28,7 +28,8 @@ export default function Login() {
     try {
       if (isLogin) {
         // Login request to the backend
-        const response = await axios.post(`${API_URL}/users/login` , {
+        console.log("Request Payload:", { email, password });
+        const response = await axios.post(`https://techblog-j6gc.onrender.com/users/login` , {
           email,
           password,
         },{ withCredentials: true } 
