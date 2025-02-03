@@ -68,7 +68,7 @@ connectDb();
 app.use('/images', express.static(path.join(__dirname, './public/images')));
 
 // ✅ Proper CORS Setup
-const allowedOrigins = ["http://localhost:5173", "https://tech-blog-cxl39nq2o-kr-projects.vercel.app"];
+const allowedOrigins = ["http://localhost:5173", "https://tech-blog-sooty-two.vercel.app"];
 
 app.use(
     cors({
